@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: esg_platform
+      POSTGRES_USER: esg
+      POSTGRES_PASSWORD: esg_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - esg_pgdata:/var/lib/postgresql/data
+
+volumes:
+  esg_pgdata:
