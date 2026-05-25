@@ -1,0 +1,27 @@
+Customer Name: Acme Manufacturing GmbH
+Service Account: 8800001234
+Rate Schedule: E-20 Medium General Demand-Metered Service
+Start Date: 02/01/2024
+End Date: 02/07/2024
+
+Type,Date,Start Time,End Time,Usage,Units,Cost,Notes
+Electric usage,2/1/2024,00:00,00:15,12.450,kWh,$1.87,
+Electric usage,2/1/2024,00:15,00:30,12.310,kWh,$1.85,
+Electric usage,2/1/2024,00:30,00:45,11.980,kWh,$1.80,
+Electric usage,2/1/2024,00:45,01:00,12.110,kWh,$1.82,
+Electric usage,2/1/2024,12:00,12:15,42.300,kWh,$6.35,
+Electric usage,2/1/2024,12:15,12:30,41.850,kWh,$6.28,
+Electric usage,2/2/2024,00:00,00:15,12.500,kWh,$1.88,
+Electric usage,2/2/2024,12:00,12:15,38.200,kWh,$5.73,Estimated
+Electric usage,2/2/2024,12:15,12:30,38.200,kWh,$5.73,Estimated
+Electric usage,2/3/2024,00:00,00:15,13.100,kWh,$1.97,
+Electric usage,2/3/2024,12:00,12:15,45.800,kWh,$6.87,
+Electric usage,2/3/2024,23:45,00:00,11.600,kWh,$1.74,
+Electric usage,2/4/2024,00:00,00:15,12,Wh,$1.85,
+Electric usage,2/4/2024,02:00,02:15,8.500,kWh,xyz,
+Electric usage,2/4/2024,03:00,03:15,abc,kWh,$1.27,
+Electric usage,2/5/2024,00:00,00:15,13.200,kWh,$1.98,
+Natural gas usage,2/5/2024,00:00,00:15,0.350,therm,$0.42,
+Electric usage,2/6/2024,00:00,00:15,12.900,kWh,$1.94,
+Electric usage,2/7/2024,00:00,00:15,12.700,kWh,$1.91,
+
