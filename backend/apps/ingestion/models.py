@@ -154,10 +154,14 @@ class SapGoodsMovementStaging(models.Model):
     sender_partner = models.CharField(max_length=50, blank=True, default="")
 
     # Header fields (E1BP2017_GM_HEAD_01)
+    # max_length=20 (not 8) because the spec is YYYYMMDD but custom ABAP
+    # exports can emit ISO 'YYYY-MM-DD' (10 chars) or worse. The raw column
+    # exists precisely to preserve whatever arrived — sizing it to the
+    # spec defeats that purpose. Parsed value still goes to parsed_budat.
     raw_budat = models.CharField(
-        max_length=8, blank=True, default="", help_text="YYYYMMDD, verbatim"
+        max_length=20, blank=True, default="", help_text="YYYYMMDD per spec, but stored verbatim"
     )
-    raw_bldat = models.CharField(max_length=8, blank=True, default="")
+    raw_bldat = models.CharField(max_length=20, blank=True, default="")
     parsed_budat = models.DateField(null=True, blank=True)
     parsed_bldat = models.DateField(null=True, blank=True)
     ref_doc_no = models.CharField(max_length=16, blank=True, default="")
