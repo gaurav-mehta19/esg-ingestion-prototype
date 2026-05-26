@@ -23,13 +23,13 @@ docker compose up -d
 # 2. Backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env                # create local config — never commit .env
+cp .env.example .env               
 python manage.py makemigrations core ingestion activity
 python manage.py migrate
-python manage.py createsuperuser   # for the /admin/ UI
-python manage.py seed_sap_demo      # SAP goods movements
-python manage.py seed_utility_demo  # Green Button electricity
-python manage.py seed_travel_demo   # Concur travel
+python manage.py createsuperuser 
+python manage.py seed_sap_demo      
+python manage.py seed_utility_demo  
+python manage.py seed_travel_demo   
 python manage.py runserver
 
 # 3. Frontend (new terminal)

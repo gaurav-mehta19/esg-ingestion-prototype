@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: esg
       POSTGRES_PASSWORD: esg_dev_password
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - esg_pgdata:/var/lib/postgresql/data
 
