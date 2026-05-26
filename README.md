@@ -15,25 +15,25 @@ This prototype implements all three sources end-to-end —
 
 Prerequisites: Python 3.11+, Node 18+, Docker.
 
-```bash
-# 1. Start Postgres
-cd backend
-docker compose up -d
+### Backend (terminal 1)
 
-# 2. Backend
+```bash
+git clone https://github.com/gaurav-mehta19/esg-ingestion-prototype
+cd esg-ingestion-prototype/backend
+docker compose up -d
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env               
-python manage.py makemigrations core ingestion activity
+cp .env.example .env
 python manage.py migrate
-python manage.py createsuperuser 
-python manage.py seed_sap_demo      
-python manage.py seed_utility_demo  
-python manage.py seed_travel_demo   
+python manage.py createsuperuser
+python manage.py seed_sap_demo && python manage.py seed_utility_demo && python manage.py seed_travel_demo
 python manage.py runserver
+```
 
-# 3. Frontend (new terminal)
-cd ../frontend
+### Frontend (terminal 2)
+
+```bash
+cd esg-ingestion-prototype/frontend
 npm install
 npm run dev
 ```
@@ -41,6 +41,21 @@ npm run dev
 - Dashboard: http://localhost:5173
 - Admin (for editing reference data): http://localhost:8000/admin/
 - API root: http://localhost:8000/api/
+
+### Subsequent runs
+
+Once the initial setup above is done, day-to-day startup is just:
+
+```bash
+# terminal 1
+cd backend && source .venv/bin/activate && docker compose up -d && python manage.py runserver
+
+# terminal 2
+cd frontend && npm run dev
+```
+
+No need to re-migrate, re-create the superuser, or re-seed unless you wipe
+the database (`docker compose down -v`).
 
 ## What you'll see after seeding
 
