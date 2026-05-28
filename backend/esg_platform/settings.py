@@ -122,3 +122,15 @@ REST_FRAMEWORK = {
 # CORS: prototype has no auth so allow all origins.
 # Tighten to specific Vercel URL when auth is added.
 CORS_ALLOW_ALL_ORIGINS = True
+
+# X-Analyst-Id is sent by the frontend on every request for audit-log actor identity.
+# Must be explicitly whitelisted or the browser preflight rejects the request.
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "x-analyst-id",
+]
