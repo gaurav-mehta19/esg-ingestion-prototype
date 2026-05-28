@@ -1,9 +1,13 @@
-// Thin fetch wrapper. Vite dev server proxies /api → http://localhost:8000.
+// Thin fetch wrapper.
+// In dev: Vite proxies /api → localhost:8000 (vite.config.js).
+// In production (Vercel): VITE_API_BASE = https://esg-ingestion-prototype.onrender.com
+//   so fetch hits the Render backend directly.
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 const ANALYST_ID = 'demo-analyst';
 
 async function request(path, opts = {}) {
-  const res = await fetch(path, {
+  const res = await fetch(`${API_BASE}${path}`, {
     headers: {
       'Content-Type': 'application/json',
       'X-Analyst-Id': ANALYST_ID,
