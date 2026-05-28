@@ -31,9 +31,23 @@ class InvalidTransitionError(ValueError):
 
 # Allowed (from_status → to_status) transitions per MODEL.md §11.1.
 # Anything not listed is an InvalidTransitionError.
+#
+# INGESTED/FLAGGED → APPROVED are direct because the analyst UI collapses
+# "mark reviewed" and "approve" into a single click ("Mark reviewed &
+# approve"). ANALYST_REVIEWED remains a valid intermediate state for a
+# future segregation-of-duties flow (reviewer ≠ approver), but the
+# current single-analyst workflow doesn't require stepping through it.
 ALLOWED_TRANSITIONS: dict[str, set[str]] = {
-    ReviewStatus.INGESTED: {ReviewStatus.FLAGGED, ReviewStatus.ANALYST_REVIEWED},
-    ReviewStatus.FLAGGED: {ReviewStatus.INGESTED, ReviewStatus.ANALYST_REVIEWED},
+    ReviewStatus.INGESTED: {
+        ReviewStatus.FLAGGED,
+        ReviewStatus.ANALYST_REVIEWED,
+        ReviewStatus.APPROVED,
+    },
+    ReviewStatus.FLAGGED: {
+        ReviewStatus.INGESTED,
+        ReviewStatus.ANALYST_REVIEWED,
+        ReviewStatus.APPROVED,
+    },
     ReviewStatus.ANALYST_REVIEWED: {ReviewStatus.APPROVED, ReviewStatus.FLAGGED},
     ReviewStatus.APPROVED: {ReviewStatus.LOCKED, ReviewStatus.FLAGGED},
     ReviewStatus.LOCKED: set(),  # locked is terminal; unlocking is a separate privileged op

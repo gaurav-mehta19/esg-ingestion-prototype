@@ -80,7 +80,7 @@ WSGI_APPLICATION = "esg_platform.wsgi.application"
 _db_url = urlparse(
     os.environ.get(
         "DATABASE_URL",
-        "postgres://esg:esg_dev_password@localhost:5433/esg_platform",
+        "postgres://esg:esg_dev_password@localhost:5432/esg_platform",
     )
 )
 DATABASES = {

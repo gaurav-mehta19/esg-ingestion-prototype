@@ -203,7 +203,7 @@ function DrawerActions({ detail, onAction }) {
   const status = detail.review_status;
   return (
     <div className="drawer-actions">
-      {status !== 'locked' && (
+      {status !== 'locked' && status !== 'flagged' && (
         <Button variant="ghost" onClick={() => onAction('flag')}>Flag for follow-up</Button>
       )}
       {(status === 'ingested' || status === 'flagged') && (
