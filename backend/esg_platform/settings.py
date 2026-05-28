@@ -119,5 +119,6 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 50,
 }
 
-# CORS: allow the Vite dev server to call the Django API in development.
-CORS_ALLOW_ALL_ORIGINS = DEBUG
+# CORS: prototype has no auth so allow all origins.
+# Tighten to specific Vercel URL when auth is added.
+CORS_ALLOW_ALL_ORIGINS = True
