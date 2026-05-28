@@ -12,7 +12,7 @@ Narration for a React-first developer:
 
 import os
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from dotenv import load_dotenv
 
@@ -83,14 +83,19 @@ _db_url = urlparse(
         "postgres://esg:esg_dev_password@localhost:5432/esg_platform",
     )
 )
+_db_qs = parse_qs(_db_url.query)
+_db_opts: dict = {}
+if _db_qs.get("sslmode"):
+    _db_opts["sslmode"] = _db_qs["sslmode"][0]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": _db_url.path.lstrip("/"),
+        "NAME": unquote(_db_url.path.lstrip("/")),  # decode %20 etc. from Neon URLs
         "USER": _db_url.username,
         "PASSWORD": _db_url.password,
         "HOST": _db_url.hostname,
         "PORT": str(_db_url.port or 5432),
+        "OPTIONS": _db_opts,
     }
 }
 
