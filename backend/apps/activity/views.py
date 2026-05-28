@@ -35,11 +35,7 @@ class ActivityRecordViewSet(viewsets.ReadOnlyModelViewSet):
       ?ghg_scope=scope_1
     """
 
-    queryset = (
-        ActivityRecord.objects.select_related("facility")
-        .prefetch_related("review_events")
-        .all()
-    )
+    queryset = ActivityRecord.objects.select_related("facility").all()
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -48,6 +44,10 @@ class ActivityRecordViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        # Only prefetch review_events for the detail view — the list serializer
+        # never uses them, so prefetching on every list request is pure overhead.
+        if self.action != "list":
+            qs = qs.prefetch_related("review_events")
         params = self.request.query_params
         if org := params.get("organization"):
             qs = qs.filter(organization_id=org)

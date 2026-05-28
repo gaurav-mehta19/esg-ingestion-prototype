@@ -9,6 +9,7 @@ import StagingIssueCard from '../components/StagingIssueCard.jsx';
 import RecordDetailDrawer from '../components/RecordDetailDrawer.jsx';
 import Card from '../components/Card.jsx';
 import EmptyState from '../components/EmptyState.jsx';
+import Skeleton from '../components/Skeleton.jsx';
 import { sourceGroupForRecord, SOURCE_GROUP_LABEL } from '../lib/labels.js';
 
 export default function ReviewDashboard({ organization }) {
@@ -17,11 +18,16 @@ export default function ReviewDashboard({ organization }) {
   const [selectedId, setSelectedId] = useState(null);
   const [activeTab, setActiveTab] = useState('all');
   const [tick, setTick] = useState(0);
+  const [recordsLoading, setRecordsLoading] = useState(true);
+  const [issuesLoading, setIssuesLoading] = useState(true);
 
   useEffect(() => {
     if (!organization) return;
+    setRecordsLoading(true);
+    setIssuesLoading(true);
     api.listActivityRecords({ organization: organization.id, limit: 500 })
-      .then((res) => setRecords(res.results || res));
+      .then((res) => setRecords(res.results || res))
+      .finally(() => setRecordsLoading(false));
     Promise.all([
       api.listSapStagingIssues(organization.id),
       api.listUtilityStagingIssues(organization.id),
@@ -30,7 +36,7 @@ export default function ReviewDashboard({ organization }) {
       sap: sap.results || sap,
       utility: util.results || util,
       travel: travel.results || travel,
-    }));
+    })).finally(() => setIssuesLoading(false));
   }, [organization, tick]);
 
   const allIssues = useMemo(
@@ -79,11 +85,23 @@ export default function ReviewDashboard({ organization }) {
         </div>
       </div>
 
-      <KpiStrip records={records} allIssues={allIssues} />
+      <KpiStrip records={records} allIssues={allIssues} loading={recordsLoading} />
 
       <SourceTabs active={activeTab} onChange={setActiveTab} countsBySource={countsBySource} />
 
-      {visibleIssues.length > 0 && (
+      {issuesLoading ? (
+        <Card tone="warning" title="Checking for ingest issues…" subtitle="">
+          <div className="issue-grid">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="issue-card issue-fixable" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <Skeleton height="20px" width="100px" />
+                <Skeleton height="13px" width="100%" />
+                <Skeleton height="13px" width="80%" />
+              </div>
+            ))}
+          </div>
+        </Card>
+      ) : visibleIssues.length > 0 && (
         <Card
           tone="warning"
           title={`Failed to ingest or normalize — ${visibleIssues.length}`}
@@ -98,10 +116,12 @@ export default function ReviewDashboard({ organization }) {
       )}
 
       <Card
-        title={`Awaiting your review — ${needsAttention.length}`}
+        title={recordsLoading ? 'Awaiting your review…' : `Awaiting your review — ${needsAttention.length}`}
         subtitle="Activity records the platform successfully created. Click any row to inspect the numbers and approve."
       >
-        {needsAttention.length === 0 ? (
+        {recordsLoading ? (
+          <ActivityTable records={[]} onSelect={setSelectedId} loading />
+        ) : needsAttention.length === 0 ? (
           <EmptyState
             icon="✓"
             title="Nothing waiting for review"
@@ -113,10 +133,12 @@ export default function ReviewDashboard({ organization }) {
       </Card>
 
       <Card
-        title={`Reviewed &amp; approved — ${reviewed.length}`}
+        title={recordsLoading ? 'Reviewed & approved…' : `Reviewed & approved — ${reviewed.length}`}
         subtitle="Approved by an analyst. Still editable until locked."
       >
-        {reviewed.length === 0 ? (
+        {recordsLoading ? (
+          <ActivityTable records={[]} onSelect={setSelectedId} loading />
+        ) : reviewed.length === 0 ? (
           <EmptyState icon="·" title="No approved records yet" description="Records you approve will appear here." />
         ) : (
           <ActivityTable records={reviewed} onSelect={setSelectedId} />
@@ -124,10 +146,12 @@ export default function ReviewDashboard({ organization }) {
       </Card>
 
       <Card
-        title={`Locked for audit — ${locked.length}`}
+        title={recordsLoading ? 'Locked for audit…' : `Locked for audit — ${locked.length}`}
         subtitle="Immutable. Will appear in external reports as-is."
       >
-        {locked.length === 0 ? (
+        {recordsLoading ? (
+          <ActivityTable records={[]} onSelect={setSelectedId} loading />
+        ) : locked.length === 0 ? (
           <EmptyState icon="🔒" title="Nothing locked yet" description="Approved records can be locked when audit-ready." />
         ) : (
           <ActivityTable records={locked} onSelect={setSelectedId} />

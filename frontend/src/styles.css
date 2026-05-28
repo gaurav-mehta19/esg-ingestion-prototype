@@ -711,3 +711,52 @@ table { width: 100%; border-collapse: collapse; }
   .app-main { padding-left: 20px; padding-right: 20px; }
   .drawer { width: 100%; }
 }
+
+/* ===================================================================
+   Skeleton loading
+   =================================================================== */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton {
+  display: inline-block;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--c-surface-muted) 25%,
+    var(--c-border)        50%,
+    var(--c-surface-muted) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-block {
+  display: block;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--c-surface-muted) 25%,
+    var(--c-border)        50%,
+    var(--c-surface-muted) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* KPI skeleton — same grid as .kpi-strip */
+.kpi-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+}
+
+/* Table skeleton rows */
+.row-skeleton td { padding: 10px 12px; }
+.row-skeleton td .skeleton-block { height: 14px; }

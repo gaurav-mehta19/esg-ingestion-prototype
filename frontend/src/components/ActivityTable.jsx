@@ -18,6 +18,7 @@ import {
   SpendProxyBadge,
 } from './StatusBadge.jsx';
 import EmptyState from './EmptyState.jsx';
+import Skeleton from './Skeleton.jsx';
 import { sourceTypeLabel } from '../lib/labels.js';
 
 function rowClass(record) {
@@ -35,7 +36,33 @@ function formatQty(qty, unit) {
   return `${display} ${unit || ''}`.trim();
 }
 
-export default function ActivityTable({ records, onSelect, emptyMessage }) {
+export default function ActivityTable({ records, onSelect, emptyMessage, loading }) {
+  if (loading) {
+    return (
+      <table className="activity-table">
+        <thead>
+          <tr>
+            <th>Date</th><th>Scope</th><th>Activity</th><th>Location</th>
+            <th>As reported</th><th>Normalized</th><th>Status</th><th>Why flagged</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...Array(5)].map((_, i) => (
+            <tr key={i} className="row row-ingested row-skeleton">
+              <td><Skeleton height="14px" width="72px" /></td>
+              <td><Skeleton height="20px" width="60px" /></td>
+              <td><Skeleton height="14px" width="120px" /><Skeleton height="11px" width="90px" style={{ marginTop: 4 }} /></td>
+              <td><Skeleton height="14px" width="80px" /></td>
+              <td><Skeleton height="14px" width="70px" /></td>
+              <td><Skeleton height="14px" width="70px" /></td>
+              <td><Skeleton height="20px" width="80px" /></td>
+              <td></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
   if (records.length === 0) {
     return <EmptyState title={emptyMessage || 'No records'} />;
   }

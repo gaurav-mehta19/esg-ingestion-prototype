@@ -19,6 +19,7 @@ import {
 } from './StatusBadge.jsx';
 import ConfirmDialog from './ConfirmDialog.jsx';
 import Button from './Button.jsx';
+import Skeleton from './Skeleton.jsx';
 import { useToast } from './Toast.jsx';
 
 const VERB_SUCCESS = {
@@ -80,7 +81,17 @@ export default function RecordDetailDrawer({ recordId, onClose, onChanged }) {
         </header>
 
         {error && <p className="drawer-error">Could not load: {error}</p>}
-        {!detail && !error && <p className="drawer-loading">Loading…</p>}
+        {!detail && !error && (
+          <div style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Skeleton height="14px" width="60%" />
+            <Skeleton height="14px" width="40%" />
+            <Skeleton height="14px" width="75%" />
+            <Skeleton height="80px" width="100%" style={{ marginTop: 8 }} />
+            <Skeleton height="14px" width="50%" />
+            <Skeleton height="14px" width="65%" />
+            <Skeleton height="14px" width="45%" />
+          </div>
+        )}
 
         {detail && (
           <>

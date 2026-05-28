@@ -1,7 +1,22 @@
 // Top-of-page numbers. Designed to answer: "what does the analyst need to act
 // on right now?" Big numbers, plain English, the actionable ones colored.
 
-export default function KpiStrip({ records, allIssues }) {
+import Skeleton from './Skeleton.jsx';
+
+export default function KpiStrip({ records, allIssues, loading }) {
+  if (loading) {
+    return (
+      <div className="kpi-strip">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="kpi-skeleton">
+            <Skeleton height="11px" width="90px" />
+            <Skeleton height="34px" width="48px" style={{ margin: '6px 0' }} />
+            <Skeleton height="10px" width="130px" />
+          </div>
+        ))}
+      </div>
+    );
+  }
   const counts = records.reduce(
     (acc, r) => {
       acc[r.review_status] = (acc[r.review_status] || 0) + 1;
