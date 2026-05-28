@@ -1,5 +1,17 @@
 # ESG Ingestion Platform — Prototype
 
+## Live deployment
+
+| | URL |
+|---|---|
+| **Dashboard** | https://esg-ingestion-prototype.vercel.app |
+| **API root** | https://esg-ingestion-prototype.onrender.com/api/ |
+| **Admin** | https://esg-ingestion-prototype.onrender.com/admin/ |
+
+Admin credentials: `admin` / `admin1234`
+
+---
+
 Two long-form docs precede the code:
 - `research-notes.md` — primary-source research on SAP, utility, and travel data.
 - `MODEL.md` — the data model + design decisions, with every choice explained.
